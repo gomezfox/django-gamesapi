@@ -74,7 +74,11 @@ urlpatterns = [
 # Paste the below code into gamesapi/urls.py to define the root views.
 # Notice it uses an include to obtain the urls from the previous step
 
-from django.urls import path, re_path, include
+from django.urls import path, re_path, inc d
+
+
+
+lude
 urlpatterns = [
     re_path(r'^', include('games.urls')),
 ]
@@ -92,3 +96,15 @@ pip install --upgrade httpie
 
 python manage.py runserver 0.0.0.0:8000
 
+# Test: GET all games (with and without headers)
+http :8000/games/
+http
+
+# Test: Create a new game
+http --json POST :8000/games/ name="PvZ 3" game_category="2D mobile arcade" played=false release_date="2016-05-18T03:02:00.776594Z"
+
+# Test: Modify an existing game
+http --json PUT :8000/games/3/ name="PvZ 3-Zombies Hate Plants" game_category="2D mobile arcade" played=true release_date="2016-05-20T03:02:00.776594Z"
+
+# Test: Delete an existing game
+http DELETE :8000/games/2/
