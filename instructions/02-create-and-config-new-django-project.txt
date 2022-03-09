@@ -1,0 +1,25 @@
+# 02 - CREATING A NEW DJANGO PROJECT AND APP
+
+# make sure you are in your virtual environment. From the project root:
+source env/bin/activate
+
+# create a new django project and cd into it (won't display output)
+django-admin startproject gamesapi
+cd gamesapi
+
+# create a new django app within the new project (won't display output)
+python manage.py startapp games
+
+# the previous created new folder structures with default django files in them.
+# cd into the games folder and look at apps.py, verifying the app name is "games"
+cd games
+nano apps.py
+
+# it also created a folder gamesapi (under gamesapi) cd into it
+cd ../gamesapi
+
+# open settings.py and add the following apps under INSTALLED_APPS section
+nano settings.py
+ ->     'games.apps.GamesConfig', # name format is <app_name>.apps.<config_class_name> (see games/apps.py)
+ ->     'rest_framework',
+
