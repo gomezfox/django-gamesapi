@@ -21,8 +21,21 @@ class Game(models.Model):
 
 # -------------------------------------------------------------------------------
 
-# Perform a migration to create your SQLite database
+# Perform a migration to create your SQLite database and prepare to migrate
 python manage.py makemigrations games
 
+# This the SQLite database file (db.sqlite3) in the django project root
 # You will see a migration has been added under the games/migrations folder
+#     migrations/0001_initial.py
+
+# Next migrate the database to incorporate the changes to your models
+python manage.py migrate
+
+# You can use the SQLiTE3 command line tool to verify your table was created,
+# along with others used by Django. Check the list for games_game.
+sqlite3 db.sqlite3 .tables
+
+# The following command is useful to view the contents of the table
+# after adding/modifying items using the API
+sqlite3 db.sqlite3 SELECT * FROM games_game ORDER BY name;
 
