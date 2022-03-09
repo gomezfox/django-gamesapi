@@ -1,0 +1,100 @@
+# 04 - Serialization and Deserialization
+
+# A serializer class manages serialization/deserialization to and from JSON
+# it's parent class is rest_framework.serializers.Serializer
+
+# Create the file gamesapi/games/serializers.py
+# The text to paste into the file is as follows
+# -------------------------------------------------------------------------------
+from rest_framework import serializers
+from gamesapi.games.models import Game
+
+
+# The GameSerializer class declares field variables used by the Game model
+class GameSerializer(serializers.Serializer):
+    pk = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(max_length=200)
+    release_date = serializers.DateTimeField()
+    game_category = serializers.CharField(max_length=200)
+    played = serializers.BooleanField(required=False)
+
+    # create function creates and return an object from validated JSON data
+    def create(self, validated_data):
+        return Game.objects.create(**validated_data)
+
+    # update function updates an object instance from validated JSON data
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.release_date = validated_data.get('release_date', instance.release_date)
+        instance.game_category = validated_data.get('game_category', instance.game_category)
+        instance.played = validated_data.get('played', instance.played)
+        instance.save()
+        return instance
+# -------------------------------------------------------------------------------
+
+# To demonstration of serializers in action, first cd to the gamesapi folder
+# then start the interactive shell
+python manage.py shell
+
+# Provide all the necessary dependencies
+
+from datetime import datetime
+from django.utils import timezone
+from io import BytesIO
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+from games.models import Game
+from games.serializers import GameSerializer
+
+# Create a instance of Game and call it as game1
+
+gamedatetime = timezone.make_aware(datetime.now(), timezone.get_current_timezone())
+game1 = Game(name='Smurfs Jungle', release_date=gamedatetime, game_category='2D mobile arcade', played=False)
+game1.save()
+
+# Create a instance of Game and call it as game2
+
+gamedatetime = timezone.make_aware(datetime.now(), timezone.get_current_timezone())
+game2 = Game(name='Angry Birds RPG', release_date=gamedatetime, game_category='3D RPG', played=False)
+game2.save()
+
+# Create a GameSerializer to serialize game1 to JSON
+
+game_serializer1 = GameSerializer(game1)
+print(game_serializer1.data)
+
+# Create a GameSerializer to serialize game2 to JSON
+
+game_serializer2 = GameSerializer(game2)
+print(game_serializer2.data)
+
+# Render the dictionaries hold in the data attribute into JSON with the
+# help of the rest_framework.renderers.JSONRenderer class.
+
+renderer = JSONRenderer()
+rendered_game1 = renderer.render(game_serializer1.data)
+rendered_game2 = renderer.render(game_serializer2.data)
+print(rendered_game1)
+print(rendered_game2)
+
+# Generate a new Game instance from a JSON string (deserialize) and parse into a dictionary
+
+json_string_for_new_game = '{"name":"Tomb Raider Extreme Edition","release_date":"2016-05-18T03:02:00.776594Z","game_category":"3D RPG","played":false}'
+json_bytes_for_new_game = bytes(json_string_for_new_game, encoding="UTF-8")
+stream_for_new_game = BytesIO(json_bytes_for_new_game)
+parser = JSONParser()
+parsed_new_game = parser.parse(stream_for_new_game)
+print(parsed_new_game)
+
+# Using the GameSerializer class to generate a fully populated Game instance named new_game
+# from the Python dictionary created in the previous step, parsed from the stream
+
+new_game_serializer = GameSerializer(data=parsed_new_game)
+if new_game_serializer.is_valid():
+    new_game = new_game_serializer.save()
+    print(new_game.name)
+
+# Quit the interactive shell
+
+quit()
+
