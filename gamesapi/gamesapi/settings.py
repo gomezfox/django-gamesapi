@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'games.apps.GamesConfig',       # name format is <app_name>.apps.<config_class_name> (see games/apps.py)
+    'rest_framework',               # required for building REST frameworks in Django (djangorestframework dependency)
 ]
 
 MIDDLEWARE = [
