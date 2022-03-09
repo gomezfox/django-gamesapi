@@ -50,3 +50,5 @@ git add README.md
 
 # create a new repo on github and push your local repo to github
 # use the github website or another valid method to create the repo
+git remote add origin <remote repository URL>
+git push origin main
