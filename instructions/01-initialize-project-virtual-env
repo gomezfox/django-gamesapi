@@ -1,0 +1,52 @@
+# cd to the folder you want to contain your project directory and create the directory
+mkdir django-api && cd django-api
+
+# ensure python is aliased to python3 and python3 is aliased to your system's python3.9 (or later)
+# if not, upgrade your python and alias them appropriately
+which python3
+which python
+
+# ensure pip is aliased to pip3
+which pip
+
+# create a virtual environment (creates a folder env for example and puts creates bin and lib directories inside)
+# the bin and lib directories will contain copies of your python executables, as well as scripts for using your venv
+# the following uses python3's built-in virtual environment and creates it in a folder called env
+
+python3 -m env
+
+# activate your virtual environment
+# running the activation script will change your PATH and realias the python executables to use the copies in bin
+# it will also use the lib directory for all dependencies instead of installing them systemwide
+
+source env/bin/activate
+
+# your command line prompt will change to reflect that your venv is activated
+# you should also see pyenv.cfg in the root folder of the venv
+
+# install dependencies
+pip install Django
+pip install djangorestframework
+
+# save your dependency version information in a text file
+pip freeze > requirements.txt
+
+# deactivate your virtual environment
+deactivate
+
+# initialize your git repository
+git init
+
+# add a .gitignore which excludes your virtual environment
+echo 'env/' > .gitignore
+
+# create README.md for your git repo
+echo "Django REST Framework Project: django-gamesapi" > README.md
+
+# add files to git and commit
+git add requirements.txt
+git add .gitignore
+git add README.md
+
+# create a new repo on github and push your local repo to github
+# use the github website or another valid method to create the repo
