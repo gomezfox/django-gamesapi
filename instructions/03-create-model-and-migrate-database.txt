@@ -1,0 +1,41 @@
+# 03-create-model-and-migrate-database
+
+# from gamesapi open games/models.py
+nano games/models.py
+
+# Add the new model as typing the following lines into models.py (comments optional)
+# -------------------------------------------------------------------------------
+
+# Create the Game model class, a subclass of django.db.models.Model
+class Game(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=200, blank=True, default='')
+    release_date = models.DateTimeField()
+    game_category = models.CharField(max_length=200, blank=True, default='')
+    played = models.BooleanField(default=False)
+
+    # Meta is an inner class with a tuple-type variable ordering
+    # set it to the games by name
+    class Meta:
+        ordering = ('name',)
+
+# -------------------------------------------------------------------------------
+
+# Perform a migration to create your SQLite database and prepare to migrate
+python manage.py makemigrations games
+
+# This the SQLite database file (db.sqlite3) in the django project root
+# You will see a migration has been added under the games/migrations folder
+#     migrations/0001_initial.py
+
+# Next migrate the database to incorporate the changes to your models
+python manage.py migrate
+
+# You can use the SQLiTE3 command line tool to verify your table was created,
+# along with others used by Django. Check the list for games_game.
+sqlite3 db.sqlite3 .tables
+
+# The following command is useful to view the contents of the table
+# after adding/modifying items using the API
+sqlite3 db.sqlite3 SELECT * FROM games_game ORDER BY name;
+
