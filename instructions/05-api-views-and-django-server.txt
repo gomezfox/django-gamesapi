@@ -62,22 +62,33 @@ def game_detail(request, pk):
 # Create a new file, games/urls.py, and in it paste the following code
 # -------------------------------------------------------------------------------
 
-from django.conf.urls import url
+from django.urls import path, re_path
 from games import views
 urlpatterns = [
-    url(r'^games/$', views.game_list),
-    url(r'^games/(?P<pk>[0-9]+)/$', views.game_detail),
+    re_path(r'^games/$', views.game_list),
+    re_path(r'^games/(?P<pk>[0-9]+)/$', views.game_detail),
 ]
 
 # -------------------------------------------------------------------------------
 
 # Paste the below code into gamesapi/urls.py to define the root views.
-# Notice it uses an include urls from the previous step
+# Notice it uses an include to obtain the urls from the previous step
 
-from django.conf.urls import url, include
+from django.urls import path, re_path, include
 urlpatterns = [
-    url(r'^', include('games.urls')),
+    re_path(r'^', include('games.urls')),
 ]
 
+
+
+# RUNNING THE DJANGO DEVELOPMENT SERVER
+
+# To test our API, we will be using the httpie.
+# To install, make sure your venv is activated and, enter
+
+pip install --upgrade httpie
+
 # Run the Django development server on port 8000
+
 python manage.py runserver 0.0.0.0:8000
+
